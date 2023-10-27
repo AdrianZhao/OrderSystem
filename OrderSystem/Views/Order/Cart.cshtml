@@ -1,0 +1,65 @@
+﻿@model OrderSystem.Models.Cart
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<h1>Your Shopping Cart</h1>
+
+@if (Model.Products.Count == 0)
+{
+    <p>Your cart is empty.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Subtotal</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cartProduct in Model.Products)
+            {
+                <tr>
+                    <td>@cartProduct.Product.Name</td>
+                    <td>@cartProduct.Quantity</td>
+                    <td>@cartProduct.Product.Price</td>
+                    <td>@(cartProduct.Quantity * cartProduct.Product.Price)</td>
+                    <td>
+                        <a asp-action="ReduceQuantity" asp-route-id="@cartProduct.Product.Id">Reduce</a> |
+                        <a asp-action="RemoveFromCart" asp-route-id="@cartProduct.Product.Id">Remove</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div>
+        <p>Total Price: @Model.Products.Sum(p => p.Quantity * p.Product.Price)</p>
+    </div>
+
+    <div>
+        <a asp-action="EmptyCart">Empty Cart</a>
+    </div>
+    <div>
+        <form asp-action="ConfirmCountry">
+            <select name="selectedCountry" class="form-control">
+                @foreach (var country in ViewBag.Countries)
+                {
+                    <option value="@country.Id">@country.Name</option>
+                }
+            </select>
+            <div>
+                <button type="submit" class="btn btn-success">Confirm Order</button>
+            </div>           
+        </form>
+    </div>
+}
+<div>
+    <a asp-action="Index" class="btn btn-primary">Back to Shopping</a>
+</div>

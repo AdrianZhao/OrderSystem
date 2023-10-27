@@ -1,0 +1,60 @@
+﻿@model OrderSystem.Models.ViewModel.ConfirmOrderViewModel
+
+@{
+    ViewData["Title"] = "Confirm Order";
+}
+
+<h1>Confirm Your Order</h1>
+
+@if (Model.Cart.Products.Count == 0)
+{
+    <p>Your cart is empty. Please add items to your cart before confirming the order.</p>
+}
+else
+{
+    <h2>Order Summary</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cartProduct in Model.Cart.Products)
+            {
+                <tr>
+                    <td>@cartProduct.Product.Name</td>
+                    <td>@cartProduct.Quantity</td>
+                    <td>@string.Format("{0:F2}", cartProduct.Product.Price)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>Total Price: @string.Format("{0:F2}", Model.Cart.Products.Sum(p => p.Quantity * p.Product.Price))</p>
+
+    <p>Converted Price (using @Model.Country.Name's conversion rate): @string.Format("{0:F2}", Model.ConvertedPrice)</p>
+
+    <p>Total Price (with taxes): @string.Format("{0:F2}", Model.TotalPrice)</p>
+
+    <a asp-action="Cart" class="btn btn-primary">Back to my cart</a>
+
+    <h2>Shipping Information</h2>
+    <form asp-action="OrderConfirmation" method="post">
+        <div class="form-group">
+            <label for="Address">Address</label>
+            <input asp-for="Address" type="text" id="Address" name="Address" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+            <label for="MailingCode">Mailing Code</label>
+            <input asp-for="MailingCode" type="text" id="MailingCode" name="MailingCode" class="form-control" required />
+        </div>
+        <input asp-for="CountryId" type="hidden" />
+        <input asp-for="ConvertedPrice" type="hidden" />
+        <input asp-for="TotalPrice" type="hidden" />
+        <button type="submit" class="btn btn-primary">Submit Order</button>
+    </form>
+}

@@ -1,0 +1,67 @@
+﻿@model IEnumerable<OrderSystem.Models.Order>
+
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<h1>Orders</h1>
+
+@if (Model.Any())
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Order Number</th>
+                <th>Destination Country</th>
+                <th>Address</th>
+                <th>Mailing Code</th>
+                <th>Total Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@(Model.ToList().IndexOf(order) + 1)</td>
+                    <td>@order.DestinationCountry</td>
+                    <td>@order.Address</td>
+                    <td>@order.MailingCode</td>
+                    <td>@order.TotalPrice.ToString("C2")</td>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Product Name</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var product in order.Products)
+                                {
+                                    <tr>
+                                        <td>@product.Product.Name</td>
+                                        <td>@product.Product.Price</td>
+                                        <td>@product.Quantity</td>
+                                        <td>@(product.Quantity * product.Product.Price)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-action="Index" class="btn btn-primary">Back to Shopping</a>
+}
+else
+{
+    <p>Your order list is empty. Start your shopping today.</p>
+
+    <a asp-action="Index" class="btn btn-primary">Begin Shopping</a>
+}

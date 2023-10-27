@@ -1,0 +1,80 @@
+﻿@model IEnumerable<OrderSystem.Models.Product>
+
+@{
+    ViewData["Title"] = "Order";
+}
+
+<div class="d-flex justify-content-between align-items-center">
+    <h1>ZhaGuMi Big Store</h1>
+    <a asp-action="Cart" class="btn btn-primary">My Cart</a>
+    <a asp-action="OrderList" class="btn btn-primary">My Order</a>
+</div>
+
+<form asp-action="Index">
+    <div class="form-group  ">
+        <input type="text" name="name" placeholder="Search by name">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a asp-action="Index" class="btn btn-secondary">Show All</a>
+    </div>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AvailableQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>Quantity</th>
+            <th>Add to cart</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AvailableQuantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <form asp-action="AddtoCart">
+                <td>
+                        @if (item.AvailableQuantity > 0)
+                        {
+                        <p>One</p>
+                        }
+                        else
+                        {
+                        <span class="text-muted">Out of stock</span>
+                        }
+                </td>
+                <td>
+                        @if (item.AvailableQuantity > 0)
+                        {
+                        <button type="submit" name="id" value="@item.Id" class="btn btn-primary">Add to Cart</button>
+                        }
+                        else
+                        {
+                        <span class="text-muted">Not Available</span>
+                        }
+                </td>
+                </form>
+            </tr>
+        }
+    </tbody>
+</table>
